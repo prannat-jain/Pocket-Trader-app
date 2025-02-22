@@ -80,7 +80,7 @@ function App() {
 
   return (
     <div style={{ margin: "20px" }}>
-      <h1>Fintech AI Stock Assistant</h1>
+      <h1>Pocket Trader - Stock Market Assistant</h1>
       <div style={{ marginBottom: "1em" }}>
         <input
           type="text"
