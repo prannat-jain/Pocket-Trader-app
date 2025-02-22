@@ -18,6 +18,7 @@ function App() {
   const [error, setError] = useState("");
 
   // Replace with your deployed backend URL if needed
+  const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
   const handleFetchData = async () => {
     if (!symbol) return;
@@ -31,7 +32,7 @@ function App() {
     try {
       // 1) Get stock data
       const stockResponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/stock/${symbol}`
+        `${process.env.BACKEND_URL}/stock/${symbol}`
       );
       if (stockResponse.data.error) {
         setError(stockResponse.data.error);
@@ -42,7 +43,7 @@ function App() {
 
       // 2) Get risk data
       const riskResponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/risk/${symbol}`
+        `${process.env.BACKEND_URL}/risk/${symbol}`
       );
       if (riskResponse.data.error) {
         setError(riskResponse.data.error);
@@ -66,7 +67,7 @@ function App() {
 
     try {
       const resp = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/transcripts/${symbol}/summary`
+        `${process.env.BACKEND_URL}/transcripts/${symbol}/summary`
       );
       if (resp.data.error) {
         setError(resp.data.error);
