@@ -1,5 +1,5 @@
-yfinance~=0.2.54
-numpy~=1.26.4
-fastapi~=0.112.2
-uvicorn
-pandas
+fastapi==0.115.8
+numpy==2.2.3
+openai==1.63.2
+requests==2.32.3
+yfinance==0.2.54
