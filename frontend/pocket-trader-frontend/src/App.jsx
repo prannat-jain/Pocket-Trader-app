@@ -31,9 +31,7 @@ function App() {
 
     try {
       // 1) Get stock data
-      const stockResponse = await axios.get(
-        `${process.env.BACKEND_URL}/stock/${symbol}`
-      );
+      const stockResponse = await axios.get(`${BACKEND_URL}/stock/${symbol}`);
       if (stockResponse.data.error) {
         setError(stockResponse.data.error);
         setLoading(false);
@@ -42,9 +40,7 @@ function App() {
       setStockData(stockResponse.data);
 
       // 2) Get risk data
-      const riskResponse = await axios.get(
-        `${process.env.BACKEND_URL}/risk/${symbol}`
-      );
+      const riskResponse = await axios.get(`${BACKEND_URL}/risk/${symbol}`);
       if (riskResponse.data.error) {
         setError(riskResponse.data.error);
         setLoading(false);
@@ -67,7 +63,7 @@ function App() {
 
     try {
       const resp = await axios.get(
-        `${process.env.BACKEND_URL}/transcripts/${symbol}/summary`
+        `${BACKEND_URL}/transcripts/${symbol}/summary`
       );
       if (resp.data.error) {
         setError(resp.data.error);
