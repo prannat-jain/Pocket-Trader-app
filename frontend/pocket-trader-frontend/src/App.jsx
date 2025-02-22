@@ -27,6 +27,7 @@ function App() {
     setStockData(null);
     setRiskData(null);
     setLoading(true);
+    setSummaryData(false);
 
     try {
       // 1) Get stock data
