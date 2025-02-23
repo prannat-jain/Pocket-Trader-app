@@ -14,6 +14,7 @@ origins = [
     "http://localhost:5173",
     "https://pocket-trader-app.vercel.app"
     "https://pocket-trader-app.com"
+    "https://www.pocket-trader-app.com"
 ]
 app.add_middleware(
     CORSMiddleware,
