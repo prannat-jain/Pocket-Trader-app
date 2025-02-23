@@ -3,6 +3,7 @@ import axios from "axios";
 
 const StockSearch = ({ onSelect }) => {
   const BACKEND_URL = "http://localhost:8000";
+  // const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -10,6 +11,7 @@ const StockSearch = ({ onSelect }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const dropdownRef = useRef(null);
+  const [suggestionSelected, setSuggestionSelected] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,6 +39,10 @@ const StockSearch = ({ onSelect }) => {
   }, [query]);
 
   const searchStocks = async () => {
+    if (suggestionSelected) {
+      setSuggestionSelected(false);
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -72,6 +78,7 @@ const StockSearch = ({ onSelect }) => {
     setShowSuggestions(false);
     setError("");
     onSelect(suggestion.symbol);
+    setSuggestionSelected(true);
   };
 
   return (
@@ -82,6 +89,7 @@ const StockSearch = ({ onSelect }) => {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Enter stock symbol, e.g. AAPL"
         className="w-full p-2 border rounded"
+        style={{ paddingRight: "20px" }}
       />
 
       {loading && (

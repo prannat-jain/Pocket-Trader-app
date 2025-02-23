@@ -8,6 +8,7 @@ import openai
 
 
 app = FastAPI()
+openai.api_key = "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"
 
 # To allow frontend (on http://localhost:3000 for dev) to call the backend
 origins = [
