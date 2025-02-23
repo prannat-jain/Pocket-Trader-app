@@ -316,7 +316,7 @@ function App() {
                     Reflects the price/earnings ratio based on historical
                     earnings. A higher ratio can mean the stock is more
                     “expensive” relative to its past earnings. This value is{" "}
-                    {interpretPE(stockData.valuation.trailingPE)}
+                    <u>{interpretPE(stockData.valuation.trailingPE)}</u>
                   </em>
                 </p>
                 <p>
@@ -325,7 +325,7 @@ function App() {
                   <em>
                     Uses estimated future earnings instead of past data,
                     providing a forward-looking measure of valuation. This value
-                    is {interpretPE(stockData.valuation.forwardPE)}
+                    is <u>{interpretPE(stockData.valuation.forwardPE)}</u>
                   </em>
                 </p>
                 <p>
@@ -335,7 +335,9 @@ function App() {
                     Compares the stock’s market value to its book value. Lower
                     ratios can indicate undervaluation or particular industry
                     norms. This value is{" "}
-                    {interpretPriceToBook(stockData.valuation.priceToBook)}
+                    <u>
+                      {interpretPriceToBook(stockData.valuation.priceToBook)}
+                    </u>
                   </em>
                 </p>
               </div>
@@ -352,9 +354,11 @@ function App() {
                     Shows how much of each dollar of revenue becomes profit
                     (after costs). Higher means more efficient profitability.
                     This value is{" "}
-                    {interpretProfitMargins(
-                      stockData.financialHighlights.profitMargins
-                    )}
+                    <u>
+                      {interpretProfitMargins(
+                        stockData.financialHighlights.profitMargins
+                      )}
+                    </u>
                   </em>
                 </p>
                 <p>
@@ -364,9 +368,11 @@ function App() {
                     The rate at which the company's revenue increases compared
                     to the previous year. Positive values suggest expansion.
                     This value is{" "}
-                    {interpretRevenueGrowth(
-                      stockData.financialHighlights.revenueGrowth
-                    )}
+                    <u>
+                      {interpretRevenueGrowth(
+                        stockData.financialHighlights.revenueGrowth
+                      )}
+                    </u>
                   </em>
                 </p>
                 <p>
@@ -389,7 +395,7 @@ function App() {
                     : "N/A"}{" "}
                   <br />
                   <em>
-                    The company’s bottom-line profit after all expenses, taxes,
+                    The company's bottom-line profit after all expenses, taxes,
                     and other costs. A key indicator of overall profitability.
                   </em>
                 </p>
