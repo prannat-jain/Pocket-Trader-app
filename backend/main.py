@@ -12,8 +12,8 @@ app = FastAPI()
 # To allow frontend (on http://localhost:3000 for dev) to call the backend
 origins = [
     "http://localhost:5173",
-    "https://pocket-trader-app.vercel.app"
-    "https://pocket-trader-app.com"
+    "https://pocket-trader-app.vercel.app",
+    "https://pocket-trader-app.com",
     "https://www.pocket-trader-app.com"
 ]
 app.add_middleware(
