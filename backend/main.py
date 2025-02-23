@@ -27,6 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+
 @app.get("/")
 def root():
     return {"message": "Fintech AI Backend Running!"}
@@ -93,6 +95,8 @@ def get_stock_data(symbol: str):
         
         # Historical data (past 1 year by default)
         hist = ticker.history(period="1y")
+        hist = hist.replace([np.inf, -np.inf], np.nan)
+        hist.dropna(subset=["Close"], inplace=True)
         hist.reset_index(inplace=True)
         
         # Basic financial metrics
