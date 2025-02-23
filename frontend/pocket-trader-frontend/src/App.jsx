@@ -45,8 +45,8 @@ function App() {
     }
   }, [stockData]);
 
-  const BACKEND_URL = "http://localhost:8000";
-  // const BACKEND_URL = "https://pocket-trader-app.onrender.com";
+  // const BACKEND_URL = "http://localhost:8000";
+  const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
   const handleFetchData = async () => {
     if (!symbol) return;
