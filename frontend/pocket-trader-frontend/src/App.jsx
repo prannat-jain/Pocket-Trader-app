@@ -53,7 +53,8 @@ function App() {
     }
   }, [summaryData]);
 
-  const BACKEND_URL = "http://localhost:8000";
+  // const BACKEND_URL = "http://localhost:8000";
+  const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
   const handleFetchData = async () => {
     if (!symbol) return;
@@ -119,28 +120,36 @@ function App() {
     >
       {/* Loading Overlay */}
       <LoadingOverlay loading={loading} />
-      <motion.h1
-        className="text-3xl font-bold mb-8"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        Pocket Trader - Stock Market Assistant
-      </motion.h1>
-      <motion.div
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="flex justify-end"
-      >
-        <div className="bg-white p-4 rounded shadow w-1/3">
-          <label className="block text-gray-700 mb-2">Enter some text:</label>
-          <input
-            type="text"
-            className="border border-gray-300 rounded px-3 py-2 w-full"
-            placeholder="Your text here..."
-          />
-        </div>
-      </motion.div>
+
+      {/* Header section with flex layout */}
+      <div className="flex justify-between items-start mb-8">
+        <motion.h1
+          className="text-3xl font-bold"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          Pocket Trader - Stock Market Assistant
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="w-1/2 bg-gray-50 p-4 rounded-lg shadow-sm"
+        >
+          <p className="text-gray-600">
+            Welcome to Pocket Trader! This tool helps you analyze stocks and
+            make informed decisions. Search a stock below to get started!.
+            <br /> You can also view the risk level, trend, and outlook for a
+            stock, as well as a summary of the latest earnings call!
+          </p>
+          <p className="text-gray-600 mt-2">
+            Disclaimer: This tool is for educational purposes only and does not
+            constitute financial advice.
+          </p>
+        </motion.div>
+      </div>
 
       <motion.div
         className="mb-8"
@@ -159,7 +168,7 @@ function App() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           disabled={loading}
-          style={{ margin: 20 }}
+          style={{}}
         >
           Get Stock Info
         </motion.button>
@@ -212,7 +221,7 @@ function App() {
                   : "N/A"}{" "}
                 <br />
                 <strong>Last Close Price:</strong>{" "}
-                {"$" + stockData.lastClosePrice || "N/A"}
+                {"$" + stockData.lastClosePrice.toFixed(2) || "N/A"}
               </p>
 
               <p className="mb-6" style={{ textAlign: "justify" }}>

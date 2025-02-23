@@ -4,15 +4,6 @@
   padding: 2rem;
 }
 
-html {
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
-
-  @media (max-width: 738px) {
-    scroll-snap-type: none;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
