@@ -87,7 +87,7 @@ const StockSearch = ({ onSelect }) => {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Type and select from suggestions..."
+        placeholder="Type and click from suggestions..."
         className="w-full p-2 border rounded"
         style={{ paddingRight: "20px" }}
       />
