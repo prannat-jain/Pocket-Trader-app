@@ -10,6 +10,10 @@ import {
 } from "recharts";
 import StockSearch from "./components/StockSearch";
 import { motion, AnimatePresence } from "framer-motion";
+import "./App.css";
+import { format, parseISO } from "date-fns";
+import { Info } from "lucide-react"; // Info icon
+import RiskInfoPopup from "./components/RiskInfoPopup";
 
 // Loading Overlay Component
 const LoadingOverlay = ({ loading }) => {
@@ -38,6 +42,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const summaryRef = useRef(null);
+  const [showRiskInfo, setShowRiskInfo] = useState(false); // Controls the risk popup
 
   useEffect(() => {
     if (summaryData && summaryRef.current) {
@@ -122,6 +127,20 @@ function App() {
       >
         Pocket Trader - Stock Market Assistant
       </motion.h1>
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex justify-end"
+      >
+        <div className="bg-white p-4 rounded shadow w-1/3">
+          <label className="block text-gray-700 mb-2">Enter some text:</label>
+          <input
+            type="text"
+            className="border border-gray-300 rounded px-3 py-2 w-full"
+            placeholder="Your text here..."
+          />
+        </div>
+      </motion.div>
 
       <motion.div
         className="mb-8"
@@ -140,6 +159,7 @@ function App() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           disabled={loading}
+          style={{ margin: 20 }}
         >
           Get Stock Info
         </motion.button>
@@ -195,7 +215,7 @@ function App() {
                 {"$" + stockData.lastClosePrice || "N/A"}
               </p>
 
-              <p className="mb-6">
+              <p className="mb-6" style={{ textAlign: "justify" }}>
                 <strong>Business Summary:</strong>
                 <br />
                 {stockData.businessSummary}
@@ -209,18 +229,37 @@ function App() {
                 <h3 className="text-xl font-semibold mb-4">
                   Price History (1 year)
                 </h3>
-                <LineChart
-                  width={600}
-                  height={300}
-                  data={stockData.historicalData}
-                  margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="Date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="Close" stroke="#8884d8" />
-                </LineChart>
+                <div className="block mx-auto w-fit">
+                  <LineChart
+                    width={600}
+                    height={300}
+                    data={stockData.historicalData}
+                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="Date"
+                      tickFormatter={(date) =>
+                        format(parseISO(date), "MMM yyyy")
+                      }
+                      angle={-15}
+                      textAnchor="end"
+                    />
+                    <YAxis domain={["auto", "auto"]} />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="Close"
+                      stroke="#8884d8"
+                      dot={{
+                        fill: "#fff",
+                        stroke: "#8884d8",
+                        strokeWidth: 2,
+                        r: 3,
+                      }}
+                    />
+                  </LineChart>
+                </div>
               </motion.div>
             </motion.div>
           </motion.div>
@@ -237,10 +276,35 @@ function App() {
             exit={{ opacity: 0, y: 20 }}
             className="mb-8 bg-white p-6 rounded-xl shadow-sm"
           >
-            <h2 className="text-2xl font-semibold mb-4">Risk & Outlook</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Risk & Outlook{" "}
+              <button
+                onClick={() => setShowRiskInfo(true)}
+                className="ml-1 text-blue-300 hover:text-blue-300 transition"
+                style={{
+                  cursor: "pointer",
+                  border: "none",
+                  background: "none",
+                  verticalAlign: "super", // Superscript effect
+                  fontSize: "1rem", // Make icon smaller
+                }}
+              >
+                <Info size={20} />
+              </button>
+            </h2>
+            {/* Risk Info Popup */}
+            <AnimatePresence>
+              {showRiskInfo && (
+                <RiskInfoPopup
+                  isOpen={showRiskInfo}
+                  onClose={() => setShowRiskInfo(false)}
+                />
+              )}
+            </AnimatePresence>
             <p>
               <strong>Short-Term Volatility:</strong>{" "}
-              {riskData.shortTermVolatility?.toFixed(4) || "N/A"} <br />
+              {riskData.shortTermVolatility?.toFixed(4) || "N/A"}
+              <br />
               <strong>Short-Term Risk Level:</strong> {riskData.shortTermRisk}{" "}
               <br />
               <strong>Long-Term Trend (Slope):</strong>{" "}
@@ -288,10 +352,20 @@ function App() {
               <strong>Year/Quarter:</strong> {summaryData.year}/Q
               {summaryData.quarter}
             </p>
-            <p>
+            <p style={{ textAlign: "justify" }}>
               <strong>Summary:</strong>
               <br />
-              {summaryData.summary}
+              {summaryData.summary
+                // split on newlines
+                .split("\n")
+                // remove empty lines
+                .filter((line) => line.trim() !== "")
+                // map each line to a list item
+                .map((line, idx) => (
+                  <li key={idx} style={{ listStyleType: "none" }}>
+                    {line}
+                  </li>
+                ))}
             </p>
           </motion.div>
         )}

@@ -210,7 +210,7 @@ def get_earnings_call_summary(symbol: str):
         prompt_text = (
             "Summarize the following earnings call transcript in a concise way. "
             "Focus on key insights, financial performance, outlook, and any guidance given. "
-            "End your summary with a short bullet list of the most important points.\n\n"
+            "Format the key points on separate lines so they can be displayed as bullet points.\n\n"
             f"Transcript:\n{full_transcript}\n"
         )
 

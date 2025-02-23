@@ -105,7 +105,10 @@ const StockSearch = ({ onSelect }) => {
       )}
 
       {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+        <ul
+          className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto"
+          style={{ listStyleType: "none" }}
+        >
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
