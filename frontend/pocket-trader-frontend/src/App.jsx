@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import StockSearch from "./components/StockSearch";
 
 function App() {
   const [symbol, setSymbol] = useState("");
@@ -18,7 +19,8 @@ function App() {
   const [error, setError] = useState("");
 
   // Replace with your deployed backend URL if needed
-  const BACKEND_URL = "https://pocket-trader-app.onrender.com";
+  // const BACKEND_URL = "https://pocket-trader-app.onrender.com";
+  const BACKEND_URL = "http://localhost:8000";
 
   const handleFetchData = async () => {
     if (!symbol) return;
@@ -82,12 +84,10 @@ function App() {
     <div style={{ margin: "20px" }}>
       <h1>Pocket Trader - Stock Market Assistant</h1>
       <div style={{ marginBottom: "1em" }}>
-        <input
-          type="text"
-          placeholder="Enter stock symbol, e.g. AAPL"
-          value={symbol}
-          onChange={(e) => setSymbol(e.target.value)}
-          style={{ marginRight: "20px" }}
+        <StockSearch
+          onSelect={(symbol) => {
+            setSymbol(symbol);
+          }}
         />
         <button onClick={handleFetchData}>Get Stock Info</button>
       </div>

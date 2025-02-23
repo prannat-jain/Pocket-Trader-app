@@ -26,6 +26,50 @@ app.add_middleware(
 def root():
     return {"message": "Fintech AI Backend Running!"}
 
+
+@app.get("/search")
+async def search_stocks(q: str = Query(..., min_length=1)):
+    """
+    Search for stocks using Yahoo Finance API.
+    Returns company symbols and names that match the query.
+    """
+    try:
+        # Yahoo Finance search API
+        url = "https://query2.finance.yahoo.com/v1/finance/search"
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        params = {
+            'q': q,
+            'quotesCount': 6,
+            'newsCount': 0,
+            'enableFuzzyQuery': False,
+            'quotesQueryId': 'tss_match_phrase_query'
+        }
+
+        response = requests.get(url, headers=headers, params=params)
+
+        if response.status_code != 200:
+            return {"error": f"Yahoo Finance API error: {response.status_code}"}
+
+        data = response.json()
+
+        if 'quotes' not in data:
+            return {"error": "No quotes found in response"}
+
+        suggestions = []
+        for quote in data['quotes']:
+            if 'symbol' in quote and ('shortname' in quote or 'longname' in quote):
+                suggestions.append({
+                    'symbol': quote['symbol'],
+                    'name': quote.get('shortname') or quote.get('longname', '')
+                })
+
+        return suggestions
+
+    except Exception as e:
+        return {"error": str(e)}
+
 @app.get("/stock/{symbol}")
 def get_stock_data(symbol: str):
     """
