@@ -98,6 +98,18 @@ def get_stock_data(symbol: str):
         market_cap = info.get("marketCap", None)
         sector = info.get("sector", None)
         long_business_summary = info.get("longBusinessSummary", "No summary available.")
+
+
+        # Example Valuation Measures
+        trailing_pe = info.get("trailingPE", None)
+        forward_pe = info.get("forwardPE", None)
+        price_to_book = info.get("priceToBook", None)
+
+        # Example Financial Highlights
+        profit_margins = info.get("profitMargins", None)
+        revenue_growth = info.get("revenueGrowth", None)
+        gross_profits = info.get("grossProfits", None)
+        net_income = info.get("netIncomeToCommon", None)
         
         return {
             "symbol": symbol.upper(),
@@ -106,7 +118,22 @@ def get_stock_data(symbol: str):
             "marketCap": market_cap,
             "lastClosePrice": last_close,
             "businessSummary": long_business_summary,
-            "historicalData": hist[["Date", "Close"]].to_dict(orient="records")
+            "historicalData": hist[["Date", "Close"]].to_dict(orient="records"),
+
+            # New fields for valuation measures
+            "valuation": {
+                "trailingPE": trailing_pe,
+                "forwardPE": forward_pe,
+                "priceToBook": price_to_book,
+            },
+
+            # New fields for financial highlights
+            "financialHighlights": {
+                "profitMargins": profit_margins,
+                "revenueGrowth": revenue_growth,
+                "grossProfits": gross_profits,
+                "netIncome": net_income,
+            },
         }
     except Exception as e:
         return {"error": str(e)}

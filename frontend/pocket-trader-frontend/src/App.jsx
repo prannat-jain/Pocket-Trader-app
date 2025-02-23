@@ -24,6 +24,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const summaryRef = useRef(null);
+  const dataRef = useRef(null);
   const [showRiskInfo, setShowRiskInfo] = useState(false); // Controls the risk popup
 
   useEffect(() => {
@@ -35,8 +36,17 @@ function App() {
     }
   }, [summaryData]);
 
-  // const BACKEND_URL = "http://localhost:8000";
-  const BACKEND_URL = "https://pocket-trader-app.onrender.com";
+  useEffect(() => {
+    if (stockData && dataRef.current) {
+      dataRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [stockData]);
+
+  const BACKEND_URL = "http://localhost:8000";
+  // const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
   const handleFetchData = async () => {
     if (!symbol) return;
@@ -93,6 +103,39 @@ function App() {
       setLoading(false);
     }
   };
+
+  // Helper function examples
+  function interpretPE(pe) {
+    if (pe == null || isNaN(pe)) return "N/A";
+    if (pe < 10) return "Low (under 10)";
+    if (pe <= 25) return "Moderate (10-25)";
+    return "High (over 25)";
+  }
+
+  function interpretPriceToBook(p2b) {
+    if (p2b == null || isNaN(p2b)) return "N/A";
+    if (p2b < 1) return "Low (< 1)";
+    if (p2b <= 3) return "Moderate (1-3)";
+    return "High (> 3)";
+  }
+
+  function interpretProfitMargins(margin) {
+    if (margin == null || isNaN(margin)) return "N/A";
+    // margin is often given as a decimal, e.g. 0.25 for 25%
+    if (margin < 0) return "Negative";
+    if (margin < 0.1) return "Low (< 10%)";
+    if (margin < 0.2) return "Moderate (10-20%)";
+    return "High (> 20%)";
+  }
+
+  function interpretRevenueGrowth(growth) {
+    if (growth == null || isNaN(growth)) return "N/A";
+    // growth is often a decimal (e.g., 0.05 = 5% yoy)
+    if (growth < 0) return "Negative";
+    if (growth < 0.1) return "Low (< 10%)";
+    if (growth < 0.2) return "Moderate (10-20%)";
+    return "High (> 20%)";
+  }
 
   return (
     <motion.div
@@ -178,6 +221,7 @@ function App() {
         {stockData && (
           <motion.div
             key="stockData"
+            ref={dataRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
@@ -197,17 +241,6 @@ function App() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <p className="mb-4">
-                <strong>Sector:</strong> {stockData.sector || "N/A"} <br />
-                <strong>Market Cap:</strong>{" "}
-                {stockData.marketCap
-                  ? "$" + stockData.marketCap.toLocaleString()
-                  : "N/A"}{" "}
-                <br />
-                <strong>Last Close Price:</strong>{" "}
-                {"$" + stockData.lastClosePrice.toFixed(2) || "N/A"}
-              </p>
-
               <p className="mb-6" style={{ textAlign: "justify" }}>
                 <strong>Business Summary:</strong>
                 <br />
@@ -255,6 +288,108 @@ function App() {
                 </div>
               </motion.div>
             </motion.div>
+
+            {/* ---------------- VALUATION MEASURES ---------------- */}
+            {stockData.valuation && (
+              <div style={{ marginTop: "2em" }}>
+                <h3>Valuation Measures</h3>
+
+                <p className="mb-4">
+                  <strong>Sector:</strong> {stockData.sector || "N/A"} <br />
+                  <strong>Market Cap:</strong>{" "}
+                  {stockData.marketCap
+                    ? "$" + stockData.marketCap.toLocaleString()
+                    : "N/A"}{" "}
+                  <br />
+                  <strong>Last Close Price:</strong>{" "}
+                  {"$" + stockData.lastClosePrice.toFixed(2) || "N/A"}
+                </p>
+                <p>
+                  <strong>Trailing P/E: </strong>
+                  {stockData.valuation.trailingPE ?? "N/A"} <br />
+                  <em>
+                    Reflects the price/earnings ratio based on historical
+                    earnings. A higher ratio can mean the stock is more
+                    “expensive” relative to its past earnings. This value is{" "}
+                    {interpretPE(stockData.valuation.trailingPE)}
+                  </em>
+                </p>
+                <p>
+                  <strong>Forward P/E: </strong>
+                  {stockData.valuation.forwardPE ?? "N/A"} <br />
+                  <em>
+                    Uses estimated future earnings instead of past data,
+                    providing a forward-looking measure of valuation. This value
+                    is {interpretPE(stockData.valuation.forwardPE)}
+                  </em>
+                </p>
+                <p>
+                  <strong>Price to Book (P/B): </strong>
+                  {stockData.valuation.priceToBook ?? "N/A"} <br />
+                  <em>
+                    Compares the stock’s market value to its book value. Lower
+                    ratios can indicate undervaluation or particular industry
+                    norms. This value is{" "}
+                    {interpretPriceToBook(stockData.valuation.priceToBook)}
+                  </em>
+                </p>
+              </div>
+            )}
+
+            {/* ---------------- FINANCIAL HIGHLIGHTS ---------------- */}
+            {stockData.financialHighlights && (
+              <div style={{ marginTop: "2em" }}>
+                <h3>Financial Highlights</h3>
+                <p>
+                  <strong>Profit Margins: </strong>
+                  {stockData.financialHighlights.profitMargins ?? "N/A"} <br />
+                  <em>
+                    Shows how much of each dollar of revenue becomes profit
+                    (after costs). Higher means more efficient profitability.
+                    This value is{" "}
+                    {interpretProfitMargins(
+                      stockData.financialHighlights.profitMargins
+                    )}
+                  </em>
+                </p>
+                <p>
+                  <strong>Revenue Growth (YoY): </strong>
+                  {stockData.financialHighlights.revenueGrowth ?? "N/A"} <br />
+                  <em>
+                    The rate at which the company's revenue increases compared
+                    to the previous year. Positive values suggest expansion.
+                    This value is{" "}
+                    {interpretRevenueGrowth(
+                      stockData.financialHighlights.revenueGrowth
+                    )}
+                  </em>
+                </p>
+                <p>
+                  <strong>Gross Profits: </strong>
+                  {stockData.financialHighlights.grossProfits
+                    ? "$" +
+                      stockData.financialHighlights.grossProfits.toLocaleString()
+                    : "N/A"}{" "}
+                  <br />
+                  <em>
+                    Revenue minus the direct costs of producing goods/services,
+                    showing basic profitability from core operations.
+                  </em>
+                </p>
+                <p>
+                  <strong>Net Income: </strong>
+                  {stockData.financialHighlights.netIncome
+                    ? "$" +
+                      stockData.financialHighlights.netIncome.toLocaleString()
+                    : "N/A"}{" "}
+                  <br />
+                  <em>
+                    The company’s bottom-line profit after all expenses, taxes,
+                    and other costs. A key indicator of overall profitability.
+                  </em>
+                </p>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -297,11 +432,30 @@ function App() {
             <p>
               <strong>Short-Term Volatility:</strong>{" "}
               {riskData.shortTermVolatility?.toFixed(4) || "N/A"}
+              {riskData.shortTermVolatility != null && (
+                <>
+                  {" "}
+                  {riskData.shortTermVolatility > 0.02
+                    ? "(Indicates higher day-to-day price swings)"
+                    : "(Indicates relatively stable daily changes)"}
+                </>
+              )}
               <br />
               <strong>Short-Term Risk Level:</strong> {riskData.shortTermRisk}{" "}
               <br />
               <strong>Long-Term Trend (Slope):</strong>{" "}
-              {riskData.longTermTrendSlope?.toFixed(4) || "N/A"} <br />
+              {riskData.longTermTrendSlope?.toFixed(4) || "N/A"}
+              {riskData.longTermTrendSlope != null && (
+                <>
+                  {" "}
+                  {riskData.longTermTrendSlope > 0
+                    ? "(Stock price has generally trended upward over the past year)"
+                    : riskData.longTermTrendSlope < 0
+                    ? "(Stock price has generally trended downward over the past year)"
+                    : "(No significant upward or downward trend detected)"}
+                </>
+              )}
+              <br />
               <strong>Long-Term Outlook:</strong> {riskData.longTermOutlook}
             </p>
           </motion.div>
