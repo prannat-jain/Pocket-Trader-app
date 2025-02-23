@@ -11,7 +11,7 @@ import {
 import StockSearch from "./components/StockSearch";
 import { motion, AnimatePresence } from "framer-motion";
 import "./App.css";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, set } from "date-fns";
 import { Info } from "lucide-react"; // Info icon
 import RiskInfoPopup from "./components/RiskInfoPopup";
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -49,7 +49,11 @@ function App() {
   const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
   const handleFetchData = async () => {
-    if (!symbol) return;
+    if (!symbol) {
+      console.log("No symbol provided");
+      setError("Please select a stock symbol from the suggestions.");
+      return;
+    }
 
     setError("");
     setStockData(null);
@@ -196,6 +200,7 @@ function App() {
           whileTap={{ scale: 0.98 }}
           disabled={loading}
           style={{}}
+          ref={dataRef}
         >
           Get Stock Info
         </motion.button>
@@ -221,7 +226,6 @@ function App() {
         {stockData && (
           <motion.div
             key="stockData"
-            ref={dataRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
