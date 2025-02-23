@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const StockSearch = ({ onSelect }) => {
-  const BACKEND_URL = "http://localhost:8000";
-  // const BACKEND_URL = "https://pocket-trader-app.onrender.com";
+  // const BACKEND_URL = "http://localhost:8000";
+  const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
