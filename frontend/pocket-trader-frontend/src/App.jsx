@@ -15,6 +15,7 @@ import { format, parseISO, set } from "date-fns";
 import { Info } from "lucide-react"; // Info icon
 import RiskInfoPopup from "./components/RiskInfoPopup";
 import LoadingSpinner from "./components/LoadingSpinner";
+import BuyMeCoffeeButton from "./components/BuyMeCoffeeButton";
 
 function App() {
   const [symbol, setSymbol] = useState("");
@@ -521,6 +522,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      <BuyMeCoffeeButton />
     </motion.div>
   );
 }
