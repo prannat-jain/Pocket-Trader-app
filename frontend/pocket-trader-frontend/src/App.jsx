@@ -139,10 +139,12 @@ function App() {
           className="w-1/2 bg-gray-50 p-4 rounded-lg shadow-sm"
         >
           <p className="text-gray-600">
-            Welcome to Pocket Trader! This tool helps you analyze stocks and
+            Welcome to Pocket Trader! This tool provides you with the
+            information you <strong>actually need</strong> to analyze stocks and
             make informed decisions. Search a stock below to get started!.
-            <br /> You can also view the risk level, trend, and outlook for a
-            stock, as well as a summary of the latest earnings call!
+            <br /> You can also view the{" "}
+            <strong>risk level, trend, and outlook</strong> for a stock, as well
+            as a summary of the <strong>latest earnings call!</strong>
           </p>
           <p className="text-gray-600 mt-2">
             Disclaimer: This tool is for educational purposes only and does not
