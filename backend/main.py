@@ -192,7 +192,7 @@ def get_stock_risk(symbol: str):
         
         # Convert numeric results into textual “risk/outlook”
         short_term_risk = "High" if short_term_volatility and short_term_volatility > 0.02 else "Moderate"
-        long_term_outlook = "Bullish" if slope > 0 else "Bearish"
+        long_term_outlook = "Bullish 📈" if slope > 0 else "Bearish 📉"
         
         return {
             "symbol": symbol.upper(),
