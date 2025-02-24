@@ -51,7 +51,7 @@ function App() {
   // const BACKEND_URL = "http://localhost:8000";
   const BACKEND_URL = "https://pocket-trader-app.onrender.com";
 
-  const handleFetchData = async () => {
+  const handleStockFetchData = async () => {
     if (!symbol) {
       console.log("No symbol provided");
       setError("Please select a stock symbol from the suggestions.");
@@ -60,7 +60,6 @@ function App() {
 
     setError("");
     setStockData(null);
-    setRiskData(null);
     setLoading(true);
     setSummaryData(false);
 
@@ -72,7 +71,24 @@ function App() {
         return;
       }
       setStockData(stockResponse.data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
+  const handleRiskFetchData = async () => {
+    if (!symbol) {
+      console.log("No symbol provided");
+      setError("Please select a stock symbol from the suggestions.");
+      return;
+    }
+    setRiskData(null);
+    setLoading(true);
+    setError("");
+
+    try {
       const riskResponse = await axios.get(`${BACKEND_URL}/risk/${symbol}`);
       if (riskResponse.data.error) {
         setError(riskResponse.data.error);
@@ -80,7 +96,6 @@ function App() {
         return;
       }
       setRiskData(riskResponse.data);
-
       setLoading(false);
     } catch (err) {
       setError(err.message);
@@ -197,7 +212,7 @@ function App() {
           }}
         />
         <motion.button
-          onClick={handleFetchData}
+          onClick={handleStockFetchData}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -412,6 +427,19 @@ function App() {
         )}
       </AnimatePresence>
 
+      {stockData && (
+        <motion.button
+          onClick={handleRiskFetchData}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          disabled={loading}
+          style={{}}
+          ref={dataRef}
+        >
+          Get Risk and Outlook
+        </motion.button>
+      )}
       {/* Risk Data Section */}
       <AnimatePresence>
         {riskData && (
@@ -482,7 +510,7 @@ function App() {
 
       {/* Transcript Button */}
       <AnimatePresence>
-        {stockData && (
+        {riskData && (
           <motion.button
             key="transcriptButton"
             onClick={handleFetchTranscriptSummary}
@@ -558,7 +586,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      <BuyMeCoffeeButton />
+      {stockData && <BuyMeCoffeeButton />}
     </motion.div>
   );
 }
