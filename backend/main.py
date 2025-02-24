@@ -158,11 +158,21 @@ def get_stock_risk(symbol: str):
     try:
         ticker = yf.Ticker(symbol)
         hist_1y = ticker.history(period="1y")
+        hist_1y = hist_1y.replace([np.inf, -np.inf], np.nan)
+        hist_1y = hist_1y.where(pd.notnull(hist_1y), None)
+
+        hist_1y.dropna(subset=["Close"], inplace=True)
+
         if hist_1y.empty:
             return {"error": "No historical data found for symbol."}
         
         # Short-term: last 30 days volatility
         hist_30 = ticker.history(period="1mo")  # ~30 days
+        hist_30 = hist_30.replace([np.inf, -np.inf], np.nan)
+        hist_30 = hist_30.where(pd.notnull(hist_30), None)
+        hist_30.dropna(subset=["Close"], inplace=True)
+        hist_30.reset_index(inplace=True)
+
         if not hist_30.empty:
             daily_returns = hist_30["Close"].pct_change().dropna()
             short_term_volatility = np.std(daily_returns)  # standard deviation
