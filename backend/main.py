@@ -246,7 +246,7 @@ def get_earnings_call_summary(symbol: str):
         # and either do multiple summarizations or use the 16k/32k token models (like GPT-3.5 16k).
 
         prompt_text = (
-            "Summarize the following earnings call transcript in a concise way. "
+            "Summarize the following earnings call transcript in a concise way in simple words without any jargon. "
             "Focus on key insights, financial performance, outlook, and any guidance given. "
             "Format the key points on separate lines so they can be displayed as bullet points.\n\n"
             f"Transcript:\n{full_transcript}\n"
@@ -263,6 +263,7 @@ def get_earnings_call_summary(symbol: str):
         )
 
         message_content = response.choices[0].message.content
+        print(message_content)
 
         # Return the transcript meta info plus the summary
         return {
