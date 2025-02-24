@@ -5,6 +5,7 @@ import numpy as np
 import os
 import requests
 import openai
+import pandas as pd
 
 
 app = FastAPI()
@@ -21,7 +22,7 @@ origins = [
 ]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -96,9 +97,11 @@ def get_stock_data(symbol: str):
         # Historical data (past 1 year by default)
         hist = ticker.history(period="1y")
         hist = hist.replace([np.inf, -np.inf], np.nan)
+        hist = hist.where(pd.notnull(hist), None)
+
         hist.dropna(subset=["Close"], inplace=True)
         hist.reset_index(inplace=True)
-        
+
         # Basic financial metrics
         # (In production, you'd fetch real financial statements or use .financials)
         last_close = hist["Close"].iloc[-1] if not hist.empty else None

@@ -315,8 +315,10 @@ function App() {
                   <em>
                     Reflects the price/earnings ratio based on historical
                     earnings. A higher ratio can mean the stock is more
-                    “expensive” relative to its past earnings. This value is{" "}
-                    <u>{interpretPE(stockData.valuation.trailingPE)}</u>
+                    “expensive” relative to its past earnings. If a stock has a
+                    trailing P/E of 20, it means you're paying $20 for every $1
+                    of earnings the company made over the past year This value
+                    is <u>{interpretPE(stockData.valuation.trailingPE)}</u>
                   </em>
                 </p>
                 <p>
@@ -324,8 +326,11 @@ function App() {
                   {stockData.valuation.forwardPE ?? "N/A"} <br />
                   <em>
                     Uses estimated future earnings instead of past data,
-                    providing a forward-looking measure of valuation. This value
-                    is <u>{interpretPE(stockData.valuation.forwardPE)}</u>
+                    providing a forward-looking measure of valuation. If a stock
+                    has a forward P/E of 15, it means you're paying $15 for
+                    every $1 of earnings the company is expected to make next
+                    year. This value is{" "}
+                    <u>{interpretPE(stockData.valuation.forwardPE)}</u>
                   </em>
                 </p>
                 <p>
