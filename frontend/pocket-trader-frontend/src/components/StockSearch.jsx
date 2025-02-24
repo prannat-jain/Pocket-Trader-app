@@ -46,12 +46,9 @@ const StockSearch = ({ onSelect }) => {
     setLoading(true);
     setError("");
     try {
-      console.log("Fetching suggestions for:", query); // Debug log
       const response = await axios.get(`${BACKEND_URL}/search`, {
         params: { q: query },
       });
-
-      console.log("API Response:", response.data); // Debug log
 
       if (response.data && response.data.error) {
         setError(response.data.error);
