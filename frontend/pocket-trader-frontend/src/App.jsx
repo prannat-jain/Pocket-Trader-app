@@ -16,6 +16,7 @@ import { Info } from "lucide-react"; // Info icon
 import RiskInfoPopup from "./components/RiskInfoPopup";
 import LoadingSpinner from "./components/LoadingSpinner";
 import BuyMeCoffeeButton from "./components/BuyMeCoffeeButton";
+import EarningsCallInfoPopup from "./components/EarningsCallInfoPopup";
 
 function App() {
   const [symbol, setSymbol] = useState("");
@@ -27,6 +28,7 @@ function App() {
   const summaryRef = useRef(null);
   const dataRef = useRef(null);
   const [showRiskInfo, setShowRiskInfo] = useState(false); // Controls the risk popup
+  const [showEarningsCallInfo, setShowEarningsCallInfo] = useState(false); // Controls the risk popup
 
   useEffect(() => {
     if (summaryData && summaryRef.current) {
@@ -509,8 +511,31 @@ function App() {
             className="mt-8 bg-white p-6 rounded-xl shadow-sm"
           >
             <h2 className="text-2xl font-semibold mb-4">
-              Transcript Summary for {summaryData.symbol}
+              Summary for {summaryData.symbol} most recent earnings call
+              <button
+                onClick={() => setShowEarningsCallInfo(true)}
+                className="ml-1 text-blue-300 hover:text-blue-300 transition"
+                style={{
+                  cursor: "pointer",
+                  border: "none",
+                  background: "none",
+                  verticalAlign: "super", // Superscript effect
+                  fontSize: "1rem", // Make icon smaller
+                }}
+              >
+                {" "}
+                <Info size={20} />
+              </button>
             </h2>
+            {/* Risk Info Popup */}
+            <AnimatePresence>
+              {showEarningsCallInfo && (
+                <EarningsCallInfoPopup
+                  isOpen={showEarningsCallInfo}
+                  onClose={() => setShowEarningsCallInfo(false)}
+                />
+              )}
+            </AnimatePresence>{" "}
             <p className="mb-4">
               <strong>Year/Quarter:</strong> {summaryData.year}/Q
               {summaryData.quarter}
