@@ -61,7 +61,6 @@ function App() {
     setError("");
     setStockData(null);
     setLoading(true);
-    setSummaryData(false);
 
     try {
       const stockResponse = await axios.get(`${BACKEND_URL}/stock/${symbol}`);
@@ -218,7 +217,6 @@ function App() {
           whileTap={{ scale: 0.98 }}
           disabled={loading}
           style={{}}
-          ref={dataRef}
         >
           Get Stock Info
         </motion.button>
@@ -248,6 +246,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             className="mb-8 bg-white p-6 rounded-xl shadow-sm"
+            ref={dataRef}
           >
             <motion.h2
               className="text-2xl font-semibold mb-4"
@@ -435,7 +434,6 @@ function App() {
           whileTap={{ scale: 0.98 }}
           disabled={loading}
           style={{}}
-          ref={dataRef}
         >
           Get Risk and Outlook
         </motion.button>
@@ -586,7 +584,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      {stockData && <BuyMeCoffeeButton />}
+      {stockData && riskData && <BuyMeCoffeeButton />}
     </motion.div>
   );
 }

@@ -80,11 +80,14 @@ const StockSearch = ({ onSelect }) => {
 
   return (
     <div className="relative w-64" ref={dropdownRef}>
+      <h3 className="text-2xl font-semibold mb-4">
+        Search for a stock and click a suggestion to get started
+      </h3>
+
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Type and click from suggestions..."
         className="w-full p-2 border rounded"
         style={{ paddingRight: "20px" }}
       />
